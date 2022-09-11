@@ -10,6 +10,11 @@ elif which brew >/dev/null &&
   . "$BREW_DIR/opt/asdf/asdf.sh"
 fi
 
+# rust
+if [ -d "$HOME/.cargo/bin" ]; then
+  PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 # mkdir .git/safe in the root of repositories you trust
 PATH=".git/safe/../../bin:$PATH"
 
