@@ -1,6 +1,5 @@
 # give us access to ^Q
-stty -ixon
-
+stty -ixon <$TTY >$TTY
 # vi mode
 bindkey -v
 bindkey "^F" vi-cmd-mode
