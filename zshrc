@@ -67,6 +67,8 @@ source $ZSH/oh-my-zsh.sh
 # source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 
 # asdf
+[[ ! -f ~/.asdf/asdf.sh ]] || source ~/.asdf/asdf.sh
+[[ ! -f ~/.asdf/completions/asdf.bash ]] || source ~/.asdf/completions/asdf.bash
 
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
