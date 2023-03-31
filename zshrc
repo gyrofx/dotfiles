@@ -60,7 +60,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
 
-plugins=(git yarn kubectl python tmux systemadmin)
+plugins=(git yarn kubectl kubectx python systemadmin)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/powerlevel10k/powerlevel10k.zsh-theme
