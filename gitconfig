@@ -57,8 +57,8 @@
   path = ~/.gitconfig.local
 [diff]
   colorMoved = zebra
-[interactive]
-	diffFilter = diff-so-fancy --patch
+#[interactive]
+#	diffFilter = diff-so-fancy --patch
 [gitflow "branch"]
 	develop = develop
 [color "diff-highlight"]
@@ -76,3 +76,5 @@
 	whitespace = red reverse
 [pull]
 	rebase = true
+[credential]
+	helper = store
