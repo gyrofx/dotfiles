@@ -76,5 +76,11 @@
 	whitespace = red reverse
 [pull]
 	rebase = true
-[credential]
-	helper = store
+	
+[credential "https://github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
