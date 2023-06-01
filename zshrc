@@ -70,8 +70,10 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.asdf/asdf.sh ]] || source ~/.asdf/asdf.sh
 [[ ! -f ~/.asdf/completions/asdf.bash ]] || source ~/.asdf/completions/asdf.bash
 
-# brew
+# direnv
+eval "$(direnv hook zsh)"
 
+# brew
 export BREW_HOME="/home/linuxbrew/.linuxbrew/bin"
 export PATH="$PATH:$BREW_HOME"
 
