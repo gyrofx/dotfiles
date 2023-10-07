@@ -15,7 +15,6 @@ alias s="rspec"
 # git-easy-checkout
 alias geco="git-easy-checkout"
 
-
 # Pretty print the path
 alias path='echo $PATH | tr -s ":" "\n"'
 
