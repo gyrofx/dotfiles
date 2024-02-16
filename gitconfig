@@ -9,7 +9,7 @@
   excludesfile = ~/.gitignore
   autocrlf = input
 	pager = delta
-	editor = vim
+	editor = code --wait
 	excludesfile = ~/.gitignore_global
 [rebase]
   autosquash = true
