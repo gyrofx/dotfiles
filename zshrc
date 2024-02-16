@@ -95,3 +95,10 @@ export PATH=$PATH:$HOME/.pulumi/bin
 export PATH=$PATH:$HOME/.pulumi/bin
 
 [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
+
+# bun completions
+[ -s "/home/felix/.bun/_bun" ] && source "/home/felix/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
