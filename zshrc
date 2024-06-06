@@ -60,7 +60,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
 
-plugins=(git yarn kubectl kubectx python systemadmin direnv) # dotenv)
+plugins=(git yarn kubectl kubectx python systemadmin ) # direnv) # dotenv)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/powerlevel10k/powerlevel10k.zsh-theme
@@ -71,7 +71,11 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.asdf/completions/asdf.bash ]] || source ~/.asdf/completions/asdf.bash
 
 # direnv
-eval "$(direnv hook zsh)"
+if [ -x "$(command -v direnv)" ]; then
+  eval "$(direnv hook zsh)"
+else
+  echo 'Warning: direnv is not installed.' >&2
+fi
 
 # brew
 export BREW_HOME="/home/linuxbrew/.linuxbrew/bin"
