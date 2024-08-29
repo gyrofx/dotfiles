@@ -1,0 +1,75 @@
+[init]
+  defaultBranch = main
+  # templatedir = ~/.git_template
+# [push]
+#   default = current
+[color]
+	ui = true
+[core]
+  excludesfile = ~/.gitignore
+  autocrlf = input
+	pager = delta
+	editor = code --wait
+	excludesfile = ~/.gitignore_global
+[rebase]
+  autosquash = true
+[merge]
+  conflictstyle = diff3
+[include]
+  path = ~/.gitconfig.local
+[push]
+	default = simple
+	followTags = true
+[commit]
+#	gpgsign = true
+#	template = ~/.stCommitMsg
+[branch]
+	autosetuprebase = always
+[branch "*branch-name*"]
+	rebase = true
+[rerere]
+	enabled = true
+[tag]
+	sort = version:refname
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[rebase]
+  autosquash = true
+[include]
+  path = ~/.gitconfig.local
+[diff]
+  colorMoved = default
+[interactive]
+  diffFilter = delta --color-only
+[gitflow "branch"]
+	develop = develop
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[pull]
+	rebase = true
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false   
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
