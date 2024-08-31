@@ -7,11 +7,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-# load custom executable functions
-for function in ~/.zsh/functions/*; do
-  source $function
-done
-
 # editors
 export VISUAL=vim
 export EDITOR=$VISUAL
@@ -71,7 +66,6 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME=""
 HIST_STAMPS="yyyy-mm-dd"
 
-plugins=(git yarn kubectl kubectx python systemadmin ) # direnv) # dotenv)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/powerlevel10k/powerlevel10k.zsh-theme
@@ -119,6 +113,8 @@ export PATH=$PATH:$HOME/.pulumi/bin
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+source <(fzf --zsh)
+
 fzf-git-branch() {
     git rev-parse HEAD > /dev/null 2>&1 || return
 
@@ -151,5 +147,7 @@ fzf-git-checkout() {
 }
 
 alias gb='fzf-git-branch'
-alias gco='fzf-git-checkout'
+alias geco='fzf-git-checkout'
+plugins=(git yarn asdf kubectl kubectx python systemadmin ) # direnv) # dotenv)
 eval "$(starship init zsh)"
+
