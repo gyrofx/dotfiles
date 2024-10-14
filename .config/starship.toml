@@ -20,10 +20,12 @@ $kotlin\
 $haskell\
 $python\
 [](fg:color_blue bg:color_bg3)\
+$kubernetes\
 $docker_context\
 $conda\
 [](fg:color_bg3 bg:color_bg1)\
 $time\
+$status\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
@@ -99,6 +101,7 @@ format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
 symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+disabled = true
 
 [c]
 symbol = " "
@@ -149,14 +152,25 @@ format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
 style = "bg:color_bg3"
 format = '[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'
 
-[time]
+[kubernetes]
+# format = '[$symbol $context \($namespace\)]($style) '
+format = '[ $symbol$context \($namespace\)]($style bg:color_bg3)'
 disabled = false
+contexts = [
+  { context_pattern = "trackops-prod", style = "dimmed red", symbol = "🔥 " },
+  { context_pattern = "trackops-dev", style = "fg:#83a598", symbol = "🐥 " },
+  { context_pattern = "score", style = "dimmed red", symbol = "🔥 " },
+  { context_pattern = "tts", style = "fg:#83a598", symbol = "🐥 " },
+]
+
+[time]
+disabled = true
 time_format = "%R"
 style = "bg:color_bg1"
 format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
 
 [line_break]
-disabled = false
+disabled = true
 
 [character]
 disabled = false
@@ -168,4 +182,7 @@ vimcmd_replace_symbol = '[](bold fg:color_purple)'
 vimcmd_visual_symbol = '[](bold fg:color_yellow)'
 
 [status]
+style = 'bg:color_bg1'
+format = '[  $symbol $status ]($style)'
+map_symbol = true
 disabled = false
