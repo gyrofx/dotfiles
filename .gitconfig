@@ -64,12 +64,7 @@
 
 [delta]
     navigate = true    # use n and N to move between diff sections
-    light = false   
+    light = false
 
-[credential "https://github.com"]
-	helper = 
-	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
-
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/home/linuxbrew/.linuxbrew/Cellar/gh/2.25.1/bin/gh auth git-credential
+[include]
+	path = ./gitconfig.local
