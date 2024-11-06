@@ -49,30 +49,33 @@ _load_settings() {
 }
 _load_settings "$HOME/.zsh/configs"
 
-# oh my zsh
-ZSH_THEME=""
-HIST_STAMPS="yyyy-mm-dd"
 
-plugins=(
-  git 
-  yarn 
-  asdf 
-  kubectl 
-  kubectx 
-  python 
-  systemadmin
-)
-export ZSH=$HOME/.oh-my-zsh
-
-
-# asdf
-[[ ! -f ~/.asdf/asdf.sh ]] || source ~/.asdf/asdf.sh
-[[ ! -f ~/.asdf/completions/asdf.bash ]] || source ~/.asdf/completions/asdf.bash
 
 # brew
 export BREW_HOME="/home/linuxbrew/.linuxbrew/bin"
 export PATH="$PATH:$BREW_HOME"
 export HOMEBREW_NO_ANALYTICS=1
+
+# asdf
+[[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && export ASDF_DIR=$(brew --prefix asdf)/libexec
+[[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && $(brew --prefix asdf)/libexec/asdf.sh
+
+# oh my zsh
+ZSH_THEME=""
+HIST_STAMPS="yyyy-mm-dd"
+
+plugins=(
+  git
+  yarn
+  asdf
+  kubectl
+  kubectx
+  python
+  systemadmin
+)
+export ZSH=$HOME/.oh-my-zsh
+
+
 
 # pulumi
 export PATH=$PATH:$HOME/.pulumi/bin
@@ -95,10 +98,8 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # autojump
-. /usr/share/autojump/autojump.sh
-[ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
+[ -f /usr/share/autojump/autojump.sh ] &&. /usr/share/autojump/autojump.sh
 
-source <(fzf --zsh)
 
 fzf-git-branch() {
     git rev-parse HEAD > /dev/null 2>&1 || return
@@ -134,6 +135,10 @@ fzf-git-checkout() {
 alias gb='fzf-git-branch'
 alias geco='fzf-git-checkout'
 
+alias opensslshort="openssl x509 -noout -subject -subject_hash -serial -fingerprint -sha256 -dates -issuer -issuer_hash -ext subjectAltName"
+
 eval "$(starship init zsh)"
 
 source $ZSH/oh-my-zsh.sh
+
+source <(fzf --zsh)
