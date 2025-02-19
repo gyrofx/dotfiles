@@ -28,11 +28,13 @@ dotfiles commit -m "..."
 
 ```
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
 
+```
 git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime\nsh 
 ~/.vim_runtime/install_awesome_vimrc.sh
 
-brew install asdf node yarn fzf nnn delta startship
+brew install asdf node yarn fzf nnn delta starship
 ```
 
 To mitigate `Can't locate JSON.pm in @INC (you may need to install the JSON module) (@INC contains: .` when autocomplete yarn commands:
