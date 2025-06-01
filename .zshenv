@@ -28,3 +28,6 @@
 
 # unset _old_path
 # [[ -f $HOME/.cargo/env ]] && source  "$HOME/.cargo/env"
+
+# uv
+export PATH="/home/felix/.local/bin:$PATH"

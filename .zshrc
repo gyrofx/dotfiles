@@ -99,6 +99,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # autojump
 [ -f /usr/share/autojump/autojump.sh ] &&. /usr/share/autojump/autojump.sh
+[ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
 
 
 fzf-git-branch() {
