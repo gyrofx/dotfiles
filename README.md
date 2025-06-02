@@ -42,7 +42,7 @@ To mitigate `Can't locate JSON.pm in @INC (you may need to install the JSON modu
 sudo dnf install 'perl(JSON)' 'perl(JSON::PP)'
 ```
 
-### Need FOnt
+### Need Font
 
 [Download](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip) and install FiraCode NerdFont
 
