@@ -41,3 +41,16 @@ To mitigate `Can't locate JSON.pm in @INC (you may need to install the JSON modu
 ```
 sudo dnf install 'perl(JSON)' 'perl(JSON::PP)'
 ```
+
+### Need FOnt
+
+[Download](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip) and install FiraCode NerdFont
+
+Unzip the downloaded and move or copy the directory to ~/.local/share/fonts directory.
+Run `fc-cache -fv` to refresh the font cache.
+
+VS Code
+```
+"editor.fontFamily": "FiraCode Nerd Font",
+"editor.fontLigatures": true,
+```
