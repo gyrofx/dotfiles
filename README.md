@@ -31,8 +31,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ```
 
 ```
-git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime\nsh 
-~/.vim_runtime/install_awesome_vimrc.sh
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
 
 brew install asdf node yarn fzf nnn delta starship
 ```
