@@ -61,6 +61,9 @@ export HOMEBREW_NO_ANALYTICS=1
 [[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && export ASDF_DIR=$(brew --prefix asdf)/libexec
 [[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && chmod +x $(brew --prefix asdf)/libexec/asdf.sh && $(brew --prefix asdf)/libexec/asdf.sh
 
+# mise version manager
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
+
 # oh my zsh
 ZSH_THEME=""
 HIST_STAMPS="yyyy-mm-dd"
@@ -102,6 +105,8 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 [ -f /usr/share/autojump/autojump.sh ] &&. /usr/share/autojump/autojump.sh
 [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
 
+# zoxide (autojump replacement)
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 fzf-git-branch() {
     git rev-parse HEAD > /dev/null 2>&1 || return
@@ -144,3 +149,4 @@ eval "$(starship init zsh)"
 source $ZSH/oh-my-zsh.sh
 
 source <(fzf --zsh)
+
