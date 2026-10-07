@@ -42,6 +42,15 @@ To mitigate `Can't locate JSON.pm in @INC (you may need to install the JSON modu
 sudo dnf install 'perl(JSON)' 'perl(JSON::PP)'
 ```
 
+### Framework Laptop
+
+`framework_tool` from the [Terra repo](https://terra.fyralabs.com/) and [Framework Control](https://github.com/ozturkkl/framework-control) (web UI as systemd service):
+```
+sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+sudo dnf install framework-system
+curl -fsSL https://raw.githubusercontent.com/ozturkkl/framework-control/main/install-linux.sh | sudo bash
+```
+
 ### Need Font
 
 [Download](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip) and install FiraCode NerdFont

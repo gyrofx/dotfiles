@@ -271,6 +271,15 @@ color_echo "yellow" "Installing Extension Manager..."
 flatpak install -y flathub com.mattjakeman.ExtensionManager
 color_echo "green" "Extension Manager installed successfully."
 
+# Install Framework Laptop tools
+color_echo "yellow" "Installing framework-system (framework_tool) from Terra repo..."
+dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf install -y framework-system
+color_echo "green" "framework-system installed successfully."
+color_echo "yellow" "Installing Framework Control..."
+curl -fsSL https://raw.githubusercontent.com/ozturkkl/framework-control/main/install-linux.sh | bash
+color_echo "green" "Framework Control installed successfully."
+
 
 # Customization
 
