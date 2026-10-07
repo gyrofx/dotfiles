@@ -51,6 +51,13 @@ sudo dnf install framework-system
 curl -fsSL https://raw.githubusercontent.com/ozturkkl/framework-control/main/install-linux.sh | sudo bash
 ```
 
+Use deep sleep instead of s2idle to reduce standby battery drain (12th Gen Intel):
+```
+sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
+```
+After reboot `cat /sys/power/mem_sleep` should show `s2idle [deep]` (brackets = active mode).
+Remove the HDMI/DP expansion cards when not needed, they draw power even in standby.
+
 ### Need Font
 
 [Download](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip) and install FiraCode NerdFont

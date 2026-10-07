@@ -279,6 +279,10 @@ color_echo "green" "framework-system installed successfully."
 color_echo "yellow" "Installing Framework Control..."
 curl -fsSL https://raw.githubusercontent.com/ozturkkl/framework-control/main/install-linux.sh | bash
 color_echo "green" "Framework Control installed successfully."
+# Use deep sleep (S3) instead of s2idle to reduce standby battery drain on 12th Gen Intel
+color_echo "yellow" "Enabling deep sleep..."
+grubby --update-kernel=ALL --args="mem_sleep_default=deep"
+color_echo "green" "Deep sleep enabled (active after reboot)."
 
 
 # Customization
