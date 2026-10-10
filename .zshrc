@@ -58,8 +58,8 @@ export PATH="$PATH:$BREW_HOME"
 export HOMEBREW_NO_ANALYTICS=1
 
 # asdf
-[[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && export ASDF_DIR=$(brew --prefix asdf)/libexec
-[[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && chmod +x $(brew --prefix asdf)/libexec/asdf.sh && $(brew --prefix asdf)/libexec/asdf.sh
+command -v brew >/dev/null && [[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && export ASDF_DIR=$(brew --prefix asdf)/libexec
+command -v brew >/dev/null && [[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && chmod +x $(brew --prefix asdf)/libexec/asdf.sh && $(brew --prefix asdf)/libexec/asdf.sh
 
 # mise version manager
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
