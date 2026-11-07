@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# fzf-git-checkout: pick a branch with fzf-git-branch and check it out
+
+git rev-parse HEAD > /dev/null 2>&1 || exit 1
+
+branch=$(fzf-git-branch)
+if [[ "$branch" = "" ]]; then
+    echo "No branch selected."
+    exit 0
+fi
+
+# If branch name starts with 'remotes/' then it is a remote branch. By
+# using --track and a remote branch name, it is the same as:
+# git checkout -b branchName --track origin/branchName
+if [[ "$branch" = 'remotes/'* ]]; then
+    git checkout --track "$branch"
+else
+    git checkout "$branch"
+fi

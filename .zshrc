@@ -109,49 +109,21 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # zf: pick a directory with fzf and cd into it
-#   starts with your zoxide history; ctrl-t switches to the folders below the current one
+#   lists your zoxide history, then the folders below the current one; ctrl-t shows only the subfolders
 zf() {
-  local z_list='zoxide query --list' fd_list='fd --type d --hidden --follow --exclude .git --absolute-path'
+  # passed to fzf as env vars so the ctrl-t reload doesn't need nested quoting
+  local ZF_FD="fd --type d --hidden --exclude .git --absolute-path | sed 's:/\$::'"
+  local ZF_ALL="{ zoxide query --list; $ZF_FD; } | awk '!seen[\$0]++'"
   local dir
-  dir=$(eval "$z_list" | fzf --scheme=path --tiebreak=index \
+  dir=$(eval "$ZF_ALL" | ZF_FD=$ZF_FD ZF_ALL=$ZF_ALL fzf --scheme=path --tiebreak=index \
     --prompt 'z> ' --query "$*" \
-    --header 'ctrl-t: history/subfolders · ctrl-/: preview' \
+    --header 'ctrl-t: all/subfolders only · ctrl-/: preview' \
     --preview 'fzf-preview {}' --preview-window 'right,50%,border-left' \
-    --bind "ctrl-t:transform:[[ \$FZF_PROMPT == z* ]] && echo 'change-prompt(dirs> )+reload($fd_list)' || echo 'change-prompt(z> )+reload($z_list)'" \
+    --bind "ctrl-t:transform:[[ \$FZF_PROMPT == z* ]] && echo 'change-prompt(dirs> )+reload(eval \"\$ZF_FD\")' || echo 'change-prompt(z> )+reload(eval \"\$ZF_ALL\")'" \
     --bind 'ctrl-/:toggle-preview') && cd -- "$dir"
 }
 
-fzf-git-branch() {
-    git rev-parse HEAD > /dev/null 2>&1 || return
-
-    git branch --color=always --all --sort=-committerdate |
-        grep -v HEAD |
-        fzf --height 50% --ansi --no-multi --preview-window right:65% \
-            --preview 'git log -n 50 --color=always --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed "s/.* //" <<< {})' |
-        sed "s/.* //"
-}
-
-fzf-git-checkout() {
-    git rev-parse HEAD > /dev/null 2>&1 || return
-
-    local branch
-
-    branch=$(fzf-git-branch)
-    if [[ "$branch" = "" ]]; then
-        echo "No branch selected."
-        return
-    fi
-
-    # If branch name starts with 'remotes/' then it is a remote branch. By
-    # using --track and a remote branch name, it is the same as:
-    # git checkout -b branchName --track origin/branchName
-    if [[ "$branch" = 'remotes/'* ]]; then
-        git checkout --track $branch
-    else
-        git checkout $branch;
-    fi
-}
-
+# fzf-git-branch and fzf-git-checkout live in ~/.local/bin
 alias gb='fzf-git-branch'
 alias geco='fzf-git-checkout'
 
