@@ -24,6 +24,18 @@ dotfiles diff --staged
 dotfiles commit -m "..."
 ```
 
+## Fresh install scripts
+
+Fedora Workstation:
+```
+sudo bash .installation/fedora/fedora_things_to_do.sh
+```
+
+Siemens Mac (run as normal user, everything via Homebrew):
+```
+bash .installation/siemens-mac/siemens_mac_things_to_do.sh
+```
+
 ## Install other tools
 
 ```
