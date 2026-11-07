@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# fzf preview: code via bat, images via kitty/chafa, PDF and video thumbnails, directories
+# usage: fzf-preview FILE [LINE]
+
+file=${1/#\~/$HOME}
+line=$2
+[[ -z $file ]] && exit 0
+
+cache=${XDG_CACHE_HOME:-$HOME/.cache}/fzf-preview
+mkdir -p "$cache"
+
+# Preview size; leave one line free at the bottom so sixel images don't scroll the window
+read -r rows cols < <(stty size 2>/dev/null </dev/tty)
+dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
+if [[ $dim = x ]]; then
+  dim=${cols:-80}x${rows:-24}
+elif [[ -z $KITTY_WINDOW_ID && -n $rows ]] && (( ${FZF_PREVIEW_TOP:-0} + FZF_PREVIEW_LINES == rows )); then
+  dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
+fi
+
+show_image() {
+  if [[ -n $KITTY_WINDOW_ID || -n $GHOSTTY_RESOURCES_DIR || $TERM == *ghostty* ]] && command -v kitten >/dev/null; then
+    kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$1" |
+      sed '$d' | sed $'$s/$/\e[m/'
+  else
+    chafa -s "$dim" --animate=off "$1"
+  fi
+}
+
+# Cached thumbnail path keyed by file path and mtime
+thumb() {
+  local key
+  key=$(printf '%s:%s' "$file" "$(stat -c %Y "$file")" | md5sum | cut -d' ' -f1)
+  printf '%s/%s.png' "$cache" "$key"
+}
+
+if [[ -d $file ]]; then
+  tree -C -L 2 --dirsfirst "$file" 2>/dev/null || ls -la --color=always "$file"
+  exit 0
+fi
+
+[[ -e $file ]] || { echo "not found: $file"; exit 0; }
+
+mime=$(file --brief --dereference --mime-type -- "$file")
+
+case $mime in
+  image/svg+xml)
+    t=$(thumb)
+    [[ -f $t ]] || magick -background none "$file" -resize 1200x1200 "$t" 2>/dev/null
+    show_image "$t"
+    ;;
+  image/*)
+    show_image "$file"
+    ;;
+  application/pdf)
+    t=$(thumb)
+    [[ -f $t ]] || pdftoppm -png -f 1 -l 1 -scale-to 1200 -singlefile "$file" "${t%.png}" 2>/dev/null
+    show_image "$t"
+    ;;
+  video/*)
+    t=$(thumb)
+    [[ -f $t ]] || ffmpeg -loglevel error -ss 5 -i "$file" -frames:v 1 -vf scale=1200:-1 "$t" 2>/dev/null ||
+      ffmpeg -loglevel error -i "$file" -frames:v 1 -vf scale=1200:-1 "$t" 2>/dev/null
+    show_image "$t"
+    ;;
+  text/* | application/json | application/javascript | application/xml | application/x-*script* | inode/x-empty)
+    bat --color=always --style=numbers,changes,header --paging=never \
+      ${line:+--highlight-line "$line"} -- "$file"
+    ;;
+  *)
+    # Anything else: show it if it's readable text, otherwise describe it
+    if grep -qI . "$file" 2>/dev/null; then
+      bat --color=always --style=numbers,changes,header --paging=never \
+        ${line:+--highlight-line "$line"} -- "$file"
+    else
+      file --brief --dereference -- "$file"
+      ls -lh --color=always -- "$file"
+    fi
+    ;;
+esac

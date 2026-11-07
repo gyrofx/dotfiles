@@ -108,6 +108,19 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # zoxide (autojump replacement)
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
+# zf: pick a directory with fzf and cd into it
+#   starts with your zoxide history; ctrl-t switches to the folders below the current one
+zf() {
+  local z_list='zoxide query --list' fd_list='fd --type d --hidden --follow --exclude .git --absolute-path'
+  local dir
+  dir=$(eval "$z_list" | fzf --scheme=path --tiebreak=index \
+    --prompt 'z> ' --query "$*" \
+    --header 'ctrl-t: history/subfolders · ctrl-/: preview' \
+    --preview 'fzf-preview {}' --preview-window 'right,50%,border-left' \
+    --bind "ctrl-t:transform:[[ \$FZF_PROMPT == z* ]] && echo 'change-prompt(dirs> )+reload($fd_list)' || echo 'change-prompt(z> )+reload($z_list)'" \
+    --bind 'ctrl-/:toggle-preview') && cd -- "$dir"
+}
+
 fzf-git-branch() {
     git rev-parse HEAD > /dev/null 2>&1 || return
 
@@ -150,3 +163,6 @@ source $ZSH/oh-my-zsh.sh
 
 source <(fzf --zsh)
 
+
+# alt-z: open zf (after oh-my-zsh so it isn't overwritten)
+bindkey -s '^[z' 'zf\n'

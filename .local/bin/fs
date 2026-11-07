@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# fs: fzf search over file names and file contents, with previews
+# usage: fs [DIR] [QUERY]
+#   ctrl-t  switch between file-name mode and content (ripgrep) mode
+#   enter   open in $EDITOR (at the matching line); images/PDFs/videos open with xdg-open
+#   ctrl-o  open with xdg-open
+#   ctrl-y  print the path(s) and exit
+#   ctrl-/  toggle preview
+
+FD="fd --type f --type d --hidden --follow --exclude .git --color=always"
+RG="rg --column --line-number --no-heading --color=always --smart-case --hidden --glob '!.git'"
+
+case $1 in
+  __toggle)
+    # Called by fzf: print the action that switches to the other mode
+    if [[ $FZF_PROMPT == files* ]]; then
+      echo "change-prompt(grep> )+disable-search+change-preview-window(+{2}/2)+reload($RG -- {q} || true)+rebind(change)"
+    else
+      echo "change-prompt(files> )+enable-search+change-preview-window(+0)+unbind(change)+reload($FD)"
+    fi
+    exit
+    ;;
+  __open)
+    # Called by fzf: open FILE [LINE]
+    file=$2 line=$3
+    case $(file --brief --dereference --mime-type -- "$file") in
+      image/* | video/* | audio/* | application/pdf)
+        xdg-open "$file" >/dev/null 2>&1 &
+        ;;
+      *)
+        case ${EDITOR:-vim} in
+          code* | codium*) $EDITOR -g "$file${line:+:$line}" ;;
+          *) ${EDITOR:-vim} ${line:++$line} "$file" ;;
+        esac
+        ;;
+    esac
+    exit
+    ;;
+esac
+
+if [[ -d $1 ]]; then
+  cd "$1" || exit 1
+  shift
+fi
+
+self=$(realpath "$0")
+
+fzf --ansi --multi \
+  --prompt 'files> ' \
+  --query "$*" \
+  --delimiter : \
+  --header 'ctrl-t: files/grep · enter: open · ctrl-o: xdg-open · ctrl-y: print · ctrl-/: preview' \
+  --preview 'fzf-preview {1} {2}' \
+  --preview-window 'right,60%,border-left' \
+  --bind "start:reload($FD)+unbind(change)" \
+  --bind "change:reload:sleep 0.1; $RG -- {q} || true" \
+  --bind "ctrl-t:transform:'$self' __toggle" \
+  --bind "enter:execute('$self' __open {1} {2})" \
+  --bind 'ctrl-o:execute-silent(xdg-open {1} >/dev/null 2>&1 &)' \
+  --bind 'ctrl-y:become(printf "%s\n" {+1})' \
+  --bind 'ctrl-/:toggle-preview'
