@@ -37,6 +37,37 @@ sh ~/.vim_runtime/install_awesome_vimrc.sh
 brew install asdf node yarn fzf nnn delta starship
 ```
 
+### Shell tools in `~/.local/bin`
+
+| Tool | What it does |
+|---|---|
+| `fs [DIR] [QUERY]` | fzf search over file names and contents (`ctrl-t` switches), with previews of code, images, PDFs, videos and folders |
+| `zf [QUERY]` / `alt-z` | pick a folder from zoxide history or the subfolders and `cd` into it (function in `.zshrc`) |
+| `dict [QUERY]` | search the dict.cc EN-DE word list |
+| `fzf-git-branch` / `gb` | pick a git branch |
+| `fzf-git-checkout` / `geco` | pick a git branch and check it out |
+| `fzf-preview FILE [LINE]` | the preview used by `fs` and `zf`, usable in any fzf command |
+
+Required:
+```
+brew install fzf fd ripgrep zoxide chafa
+sudo dnf install bat tree wl-clipboard
+```
+
+Optional previews:
+```
+sudo dnf install kitty-kitten   # sharp images in kitty/Ghostty that don't stick on screen
+sudo dnf install ImageMagick    # SVG previews
+sudo dnf install poppler-utils  # PDF previews
+sudo dnf install ffmpeg         # video previews (full ffmpeg is in RPM Fusion)
+```
+
+`dict` needs the word list, which is not in this repo (dict.cc data is for private use only).
+Request the EN-DE file at https://www.dict.cc/translation_file_request.php, then:
+```
+dict --import ~/Downloads/<file>.txt
+```
+
 To mitigate `Can't locate JSON.pm in @INC (you may need to install the JSON module) (@INC contains: .` when autocomplete yarn commands:
 ```
 sudo dnf install 'perl(JSON)' 'perl(JSON::PP)'
