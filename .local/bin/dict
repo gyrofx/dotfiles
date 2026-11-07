@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# dict: search the dict.cc EN-DE word list with fzf
+# usage: dict [QUERY]
+#        dict --import FILE   build the search data from a dict.cc download
+#   enter   print the entry and exit
+#   ctrl-y  copy the German translation to the clipboard
+#   ctrl-e  copy the English term to the clipboard
+#   ctrl-/  toggle preview (all translations of the English and German term)
+# The data stays in ~/.local/share/dict (dict.cc license: private use only, don't commit it)
+
+data=${XDG_DATA_HOME:-$HOME/.local/share}/dict
+raw=$data/en-de.tsv   # EN \t DE \t type \t subject
+view=$data/en-de.txt  # lines for fzf: EN │ DE │ type subject (no colours, they make fzf 4x slower)
+sep=' │ '
+
+case $1 in
+  --import)
+    [[ -f $2 ]] || { echo "usage: dict --import FILE" >&2; exit 1; }
+    mkdir -p "$data"
+    # Drop comments and empty lines, decode HTML entities
+    perl -CSD -ne '
+      next if /^#/ || /^\s*$/;
+      s/&#(\d+);/chr($1)/ge; s/&amp;/&/g; s/&lt;/</g; s/&gt;/>/g; s/&quot;/"/g;
+      s/[ \t]+$//; print' "$2" >"$raw"
+    awk -F'\t' -v sep="$sep" '{
+      meta = $3; if ($4 != "") meta = meta (meta != "" ? " " : "") $4
+      printf "%s%s%s%s%s\n", $1, sep, $2, sep, meta
+    }' "$raw" >"$view"
+    echo "imported $(wc -l <"$raw") entries into $data"
+    exit
+    ;;
+  __preview)
+    # Called by fzf: show every entry with the same English term, then the same German term
+    en=$2 de=$3
+    printf '\033[1m%s\033[0m\n' "$en"
+    grep -F -- "$en" "$raw" |
+      awk -F'\t' -v t="$en" '$1 == t { printf "  \033[36m%s\033[0m  \033[2m%s %s\033[0m\n", $2, $3, $4 }'
+    printf '\n\033[1m%s\033[0m\n' "$de"
+    grep -F -- "$de" "$raw" |
+      awk -F'\t' -v t="$de" '$2 == t { printf "  %s  \033[2m%s %s\033[0m\n", $1, $3, $4 }'
+    exit
+    ;;
+esac
+
+[[ -f $view ]] || { echo "no data yet, run: dict --import <dict.cc file>" >&2; exit 1; }
+
+self=$(realpath "$0")
+
+fzf --exact --literal --tiebreak=length,begin \
+  --query "$*" \
+  --prompt 'dict> ' \
+  --delimiter "$sep" \
+  --header 'enter: print · ctrl-y: copy German · ctrl-e: copy English · ctrl-/: preview' \
+  --preview "'$self' __preview {1} {2}" \
+  --preview-window 'down,40%,border-top,hidden' \
+  --bind 'ctrl-y:execute-silent(printf %s {2} | wl-copy)+abort' \
+  --bind 'ctrl-e:execute-silent(printf %s {1} | wl-copy)+abort' \
+  --bind 'ctrl-/:toggle-preview' \
+  <"$view"
