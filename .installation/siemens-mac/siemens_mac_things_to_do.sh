@@ -166,6 +166,11 @@ brew tap oven-sh/bun
 brew_formula bun
 
 
+# Needed by the shell tools in ~/.local/bin (fs, zf, dict, fzf-preview), see README.md
+color_echo "yellow" "Installing tools for the fzf shell tools..."
+brew_formula fd ripgrep zoxide chafa bat tree
+
+
 # AI command line tools
 color_echo "yellow" "Installing Claude Code and GitHub Copilot CLI..."
 brew_cask claude-code
